@@ -47,16 +47,52 @@ Pour chaque exercice :
 ### Exercice 1 : État et Effets 
 #### Objectif : Implémenter l'affichage et la recherche de posts
 
-- [ ] 1.1 Compléter le hook `usePosts` pour récupérer les posts depuis l'API dummyjson.com
-- [ ] 1.2 Implémenter le composant `PostList` pour afficher les posts
-- [ ] 1.3 Ajouter la fonctionnalité de recherche par titre ou contenu dans `PostSearch`
-- [ ] 1.4 Documenter votre solution ici
+- [x] 1.1 Compléter le hook usePosts pour récupérer les posts depuis l'API dummyjson.com
+- [x] 1.2 Implémenter le composant PostList pour afficher les posts
+- [x] 1.3 Ajouter la fonctionnalité de recherche par titre ou contenu dans PostSearch
+- [x] 1.4 Documenter votre solution ici
 
 _Votre réponse pour l'exercice 1 :_
 ```
 Expliquez votre solution ici
-[Ajoutez vos captures d'écran]
-```
+### Solution
+
+Pour cet exercice, j'ai créé un hook personnalisé `usePosts` qui récupère les données depuis l'API DummyJSON à l'aide de `fetch()` et de `useEffect()`.
+
+Le composant `PostList` affiche la liste des posts récupérés depuis l'API en utilisant la méthode `map()`.
+
+Le composant `PostSearch` permet à l'utilisateur de rechercher des posts. À chaque modification du champ de recherche, le terme saisi est envoyé au hook `usePosts`, qui effectue une nouvelle requête vers l'API :
+
+`https://dummyjson.com/posts/search?q=motCle`
+
+### Fonctionnalités réalisées
+
+* Récupération des posts depuis l'API DummyJSON
+* Affichage de la liste des posts
+* Gestion du chargement des données
+* Recherche de posts par titre ou contenu
+* Affichage d'un message lorsqu'aucun post n'est trouvé
+
+### Difficultés rencontrées
+
+* Comprendre le fonctionnement du hook `useEffect`
+* Manipuler les données retournées par l'API
+* Faire communiquer les composants `PostSearch`, `App` et `PostList`
+
+### Solution adoptée
+
+* Utilisation de `useState` pour stocker les données
+* Utilisation de `useEffect` pour charger les posts
+* Utilisation de `fetch` pour appeler l'API
+* Utilisation des props pour transmettre les données entre composants
+
+### Captures d'écran
+
+#### Liste complète des posts
+![Liste complète](screenshots/EX1_Scren/listPpost.png)
+
+#### Recherche de posts
+![Recherche](screenshots/EX1_Scren/ListPostFilter.png)
 
 ### Exercice 2 : Hooks Personnalisés
 #### Objectif : Créer des hooks réutilisables
