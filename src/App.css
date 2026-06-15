@@ -55,3 +55,31 @@ body,
 }
 
 /* TODO: Exercice 3 - Ajouter des styles spécifiques au mode sombre */
+.light {
+  background-color: white;
+  color: black;
+  min-height: 100vh;
+}
+
+.dark {
+  background-color: #212529;
+  color: white;
+  min-height: 100vh;
+}
+
+.dark .card {
+  background-color: #343a40;
+  color: white;
+}
+
+.dark .form-control {
+  background-color: #343a40;
+  color: white;
+  border-color: #495057;
+}
+
+.dark .input-group-text {
+  background-color: #343a40;
+  color: white;
+  border-color: #495057;
+}

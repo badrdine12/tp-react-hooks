@@ -1,5 +1,5 @@
-import React from "react";
-// TODO: Exercice 3 - Importer useTheme
+import React, { useCallback, useMemo } from "react";
+import { useTheme } from "../context/ThemeContext";
 // TODO: Exercice 4 - Importer useIntersectionObserver
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -23,23 +23,27 @@ function PostList({
   onTagClick,
   infiniteScroll = true,
 }) {
-  // TODO: Exercice 3 - Utiliser le hook useTheme
+  const { theme } = useTheme();
+  const themeClasses = useMemo(() => ({
+    card: theme === "dark" ? "card mb-4 bg-dark text-light border-secondary" : "card mb-4",
+    badge: theme === "dark" ? "badge bg-info text-dark me-2" : "badge bg-primary me-2",
+  }), [theme]);
 
   // TODO: Exercice 4 - Utiliser useIntersectionObserver pour le défilement infini
 
   // TODO: Exercice 3 - Utiliser useCallback pour les gestionnaires d'événements
-  const handlePostClick = (post) => {
+  const handlePostClick = useCallback((post) => {
     if (onPostClick) {
       onPostClick(post);
     }
-  };
+  }, [onPostClick]);
 
-  const handleTagClick = (e, tag) => {
+  const handleTagClick = useCallback((e, tag) => {
     e.stopPropagation(); // Éviter de déclencher le clic sur le post
     if (onTagClick) {
       onTagClick(tag);
     }
-  };
+  }, [onTagClick]);
 
   // TODO: Exercice 1 - Gérer le cas où il n'y a pas de posts
   if (posts.length === 0 && !loading) {
@@ -52,7 +56,7 @@ function PostList({
       {posts.map((post) => (
         <div
           key={post.id}
-          className="card mb-4"
+          className={themeClasses.card}
           onClick={() => handlePostClick(post)}
         >
           <div className="card-body">
@@ -64,7 +68,7 @@ function PostList({
               {post.tags?.map((tag) => (
                 <span
                   key={tag}
-                  className="badge bg-primary me-2"
+                  className={themeClasses.badge}
                   onClick={(e) => handleTagClick(e, tag)}
                 >
                   {tag}
@@ -76,6 +80,7 @@ function PostList({
       ))}
 
       {/* Afficher le spinner de chargement */}
+      {loading && <LoadingSpinner />}
 
       {/* TODO: Exercice 4 - Ajouter la référence pour le défilement infini */}
 
@@ -90,4 +95,4 @@ function PostList({
 }
 
 // TODO: Exercice 3 - Utiliser React.memo pour optimiser les rendus
-export default PostList;
+export default React.memo(PostList);

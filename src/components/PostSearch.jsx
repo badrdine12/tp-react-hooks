@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-// TODO: Exercice 3 - Importer useTheme
+import React, { useCallback, useMemo, useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 /**
  * Composant de recherche de posts
@@ -18,16 +18,28 @@ function PostSearch({
   const [searchInput, setSearchInput] = useState('');
   
   // TODO: Exercice 3 - Utiliser le hook useTheme
-  
+  const { theme } = useTheme();
   // TODO: Exercice 3 - Utiliser useCallback pour optimiser le gestionnaire
-  const handleSearchChange = (e) => {
+  const handleSearchChange = useCallback((e) => {
     const value = e.target.value;
     setSearchInput(value);
     onSearch(value);
-  };
+  }, [onSearch]);
+
+  const handleClearSearch = useCallback(() => {
+    setSearchInput('');
+    onSearch('');
+  }, [onSearch]);
+
+  const handleTagChange = useCallback((e) => {
+    onTagSelect(e.target.value);
+  }, [onTagSelect]);
   
   // TODO: Exercice 3 - Appliquer les classes CSS en fonction du thème
-  const themeClasses = '';
+  const themeClasses = useMemo(() => ({
+    button: theme === 'dark' ? 'btn btn-outline-light' : 'btn btn-outline-secondary',
+    select: theme === 'dark' ? 'form-select bg-dark text-light border-secondary' : 'form-select'
+  }), [theme]);
   
   return (
     <div className="mb-4">
@@ -48,12 +60,9 @@ function PostSearch({
             {/* TODO: Exercice 1 - Ajouter le bouton pour effacer la recherche */}
             {searchInput && (
               <button
-                className="btn btn-outline-secondary"
+                className={themeClasses.button}
                 type="button"
-                onClick={() => {
-                  setSearchInput('');
-                  onSearch('');
-                }}
+                onClick={handleClearSearch}
               >
                 <i className="bi bi-x"></i>
               </button>
@@ -61,11 +70,25 @@ function PostSearch({
           </div>
         </div>
         
-        {/* TODO: Exercice 4 - Ajouter le sélecteur de tags */}
+        <div className="col-md-4">
+          <select
+            className={themeClasses.select}
+            value={selectedTag}
+            onChange={handleTagChange}
+            aria-label="Filtrer par tag"
+          >
+            <option value="">Tous les tags</option>
+            {availableTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
 }
 
 // TODO: Exercice 3 - Utiliser React.memo pour optimiser les rendus
-export default PostSearch;
+export default React.memo(PostSearch);

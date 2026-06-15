@@ -133,9 +133,22 @@ Expliquez votre solution ici
 - [ ] 3.4 Documenter votre solution ici
 
 _Votre réponse pour l'exercice 3 :_
+### Captures d'écran
 ```
 Expliquez votre solution ici
-[Ajoutez vos captures d'écran]
+### Fonctionnalités réalisées
+
+* Gestion globale du thème avec Context API
+* Persistance du thème avec localStorage
+* Composant ThemeToggle
+* Optimisation avec useCallback
+* Optimisation avec React.memo
+
+### capture des ecran
+
+![Theme Light](screenshots/Ex3/clairMode.png)
+![Theme Dark](screenshots/Ex3/darkMode.png)
+
 ```
 
 ### Exercice 4 : Fonctionnalités avancées

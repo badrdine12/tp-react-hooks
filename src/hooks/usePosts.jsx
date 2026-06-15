@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 // TODO: Exercice 2 - Importer useDebounce
 import useDebounce from "./useDebounce";
 
@@ -31,18 +31,20 @@ function usePosts({
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   // TODO: Exercice 3 - Utiliser useCallback pour construire l'URL de l'API
-  const buildApiUrl = (skip = 0) => {
+  const buildApiUrl = useCallback((skip = 0) => {
     let url = `https://dummyjson.com/posts?limit=${limit}&skip=${skip}`;
 
     if (debouncedSearchTerm) {
       url = `https://dummyjson.com/posts/search?q=${debouncedSearchTerm}`;
+    } else if (tag) {
+      url = `https://dummyjson.com/posts/tag/${encodeURIComponent(tag)}?limit=${limit}&skip=${skip}`;
     }
 
     return url;
-  };
+  }, [debouncedSearchTerm, tag, limit]);
 
   // TODO: Exercice 1 - Implémenter la fonction pour charger les posts
-  const fetchPosts = async (reset = false) => {
+  const fetchPosts = useCallback(async (reset = false) => {
     try {
       setLoading(true);
       setError(null);
@@ -59,16 +61,19 @@ function usePosts({
     } finally {
       setLoading(false);
     }
-  };
+  }, [buildApiUrl, limit, page]);
 
   // TODO: Exercice 1 - Utiliser useEffect pour charger les posts quand les filtres changent
   useEffect(() => {
     fetchPosts(true);
-  }, [debouncedSearchTerm, tag, limit]);
+  }, [fetchPosts]);
 
   // TODO: Exercice 4 - Implémenter la fonction pour charger plus de posts
 
   // TODO: Exercice 3 - Utiliser useMemo pour calculer les tags uniques
+  const availableTags = useMemo(() => {
+    return [...new Set(posts.flatMap((post) => post.tags || []))];
+  }, [posts]);
 
   // TODO: Exercice 4 - Implémenter la fonction pour charger un post par son ID
 
@@ -79,6 +84,7 @@ function usePosts({
   page,
   total,
   setPage,
+  availableTags,
 };
 }
 
