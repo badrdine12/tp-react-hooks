@@ -79,7 +79,7 @@ Le composant `PostSearch` permet à l'utilisateur de rechercher des posts. À ch
 * Manipuler les données retournées par l'API
 * Faire communiquer les composants `PostSearch`, `App` et `PostList`
 
-### Solution adoptée
+###Solution  
 
 * Utilisation de `useState` pour stocker les données
 * Utilisation de `useEffect` pour charger les posts
@@ -97,15 +97,31 @@ Le composant `PostSearch` permet à l'utilisateur de rechercher des posts. À ch
 ### Exercice 2 : Hooks Personnalisés
 #### Objectif : Créer des hooks réutilisables
 
-- [ ] 2.1 Créer le hook `useDebounce` pour optimiser la recherche
-- [ ] 2.2 Créer le hook `useLocalStorage` pour persister les préférences utilisateur
-- [ ] 2.3 Utiliser ces hooks dans l'application
-- [ ] 2.4 Documenter votre solution ici
+- [x] 2.1 Créer le hook useDebounce pour optimiser la recherche
+- [x] 2.2 Créer le hook useLocalStorage pour persister les préférences utilisateur
+- [x] 2.3 Utiliser ces hooks dans l'application
+- [x] 2.4 Documenter votre solution ici
 
 _Votre réponse pour l'exercice 2 :_
 ```
 Expliquez votre solution ici
-[Ajoutez vos captures d'écran]
+### Solution
+### Fonctionnalités réalisées
+
+* Création du hook `useDebounce`
+* Création du hook `useLocalStorage`
+* Optimisation des recherches
+* Sauvegarde des préférences utilisateur
+
+### Solution adoptée
+
+* Utilisation de `useEffect` pour gérer le délai du debounce
+* Utilisation de `localStorage.getItem()` et `localStorage.setItem()` pour la persistance des données
+
+### Captures d'écran
+![Recherche](screenshots/Ex2/optimisationRecherche.png)
+
+
 ```
 
 ### Exercice 3 : Optimisation et Context
