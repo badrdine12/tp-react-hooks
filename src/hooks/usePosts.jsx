@@ -26,6 +26,7 @@ function usePosts({
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   // TODO: Exercice 4 - Ajouter l'état pour le post sélectionné
+  const [selectedPost, setSelectedPost] = useState(null);
 
   // TODO: Exercice 2 - Utiliser useDebounce pour le terme de recherche
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
@@ -44,31 +45,38 @@ function usePosts({
   }, [debouncedSearchTerm, tag, limit]);
 
   // TODO: Exercice 1 - Implémenter la fonction pour charger les posts
-  const fetchPosts = useCallback(async (reset = false) => {
+  const fetchPosts = useCallback(async (reset = false, pageToLoad = 1) => {
     try {
       setLoading(true);
       setError(null);
 
-      const skip = reset ? 0 : (page - 1) * limit;
+      const skip = reset ? 0 : (pageToLoad - 1) * limit;
 
       const response = await fetch(buildApiUrl(skip));
       const data = await response.json();
-
-      setPosts(data.posts);
+      setPosts((prevPosts) => reset ? data.posts : [...prevPosts, ...data.posts]);
       setTotal(data.total);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  }, [buildApiUrl, limit, page]);
+  }, [buildApiUrl, limit]);
 
   // TODO: Exercice 1 - Utiliser useEffect pour charger les posts quand les filtres changent
   useEffect(() => {
-    fetchPosts(true);
-  }, [fetchPosts]);
+    setPage(1);
+    fetchPosts(true, 1);
+  }, [debouncedSearchTerm, tag, limit, fetchPosts]);
 
   // TODO: Exercice 4 - Implémenter la fonction pour charger plus de posts
+  const loadMorePosts = useCallback(async () => {
+    if (!loading && page * limit < total) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      await fetchPosts(false, nextPage);
+    }
+  }, [fetchPosts, loading, page, limit, total]);
 
   // TODO: Exercice 3 - Utiliser useMemo pour calculer les tags uniques
   const availableTags = useMemo(() => {
@@ -76,6 +84,15 @@ function usePosts({
   }, [posts]);
 
   // TODO: Exercice 4 - Implémenter la fonction pour charger un post par son ID
+  const loadPost = useCallback(async (id) => {
+    try {
+      const response = await fetch(`https://dummyjson.com/posts/${id}`);
+      const data = await response.json();
+      setSelectedPost(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }, []);
 
  return {
   posts,
@@ -85,6 +102,10 @@ function usePosts({
   total,
   setPage,
   availableTags,
+  selectedPost,
+  setSelectedPost,
+  loadPost,
+  loadMorePosts,
 };
 }
 

@@ -162,6 +162,24 @@ Expliquez votre solution ici
 _Votre réponse pour l'exercice 4 :_
 ```
 Expliquez votre solution ici
+
+### Fonctionnalités réalisées
+
+* Chargement infini des posts
+* Affichage détaillé d'un post
+* Filtrage par tags
+* Gestion des événements utilisateur
+
+### Captures d'écran
+
+#### Détail d'un post
+
+![Post Details](screenshots/Ex4/detailsPost.png)
+
+#### Filtrage par tag
+
+![Tag Filter](screenshots/Ex4/amiracainFiltreTag.png)
+
 [Ajoutez vos captures d'écran]
 ```
 

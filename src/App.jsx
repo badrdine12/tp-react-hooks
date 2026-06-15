@@ -4,6 +4,7 @@ import PostList from "./components/PostList";
 import PostSearch from "./components/PostSearch";
 import ThemeToggle from "./components/ThemeToggle";
 import { useTheme } from "./context/ThemeContext";
+import PostDetails from "./components/PostDetails";
 // TODO: Exercice 1 - Importer le hook usePosts
 import usePosts from "./hooks/usePosts";
 // TODO: Exercice 2 - Importer le hook useLocalStorage
@@ -15,13 +16,26 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   // TODO: Exercice 1 - Utiliser le hook usePosts pour récupérer les posts
-  const { posts, loading, error, availableTags } = usePosts({
+  const {
+    posts,
+    loading,
+    error,
+    total,
+    availableTags,
+    selectedPost,
+    setSelectedPost,
+    loadPost,
+    loadMorePosts,
+  } = usePosts({
     searchTerm,
     tag: selectedTag,
   });
 
   // TODO: Exercice 2 - Utiliser useLocalStorage pour le mode de défilement
-  const [infiniteScroll, setInfiniteScroll] = useLocalStorage("infiniteScroll", true);
+  const [infiniteScroll, setInfiniteScroll] = useLocalStorage(
+    "infiniteScroll",
+    true,
+  );
 
   // TODO: Exercice 3 - Utiliser useCallback pour les gestionnaires d'événements
   const handleSearchChange = React.useCallback((term) => {
@@ -32,9 +46,16 @@ function App() {
     setSelectedTag(tag);
   }, []);
 
-  const handleInfiniteScrollChange = React.useCallback((e) => {
-    setInfiniteScroll(e.target.checked);
-  }, [setInfiniteScroll]);
+  const handlePostClick = React.useCallback((post) => {
+    loadPost(post.id);
+  }, [loadPost]);
+
+  const handleInfiniteScrollChange = React.useCallback(
+    (e) => {
+      setInfiniteScroll(e.target.checked);
+    },
+    [setInfiniteScroll],
+  );
 
   return (
     <div className={`${theme} container py-4`}>
@@ -70,13 +91,22 @@ function App() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         {/* TODO: Exercice 4 - Ajouter le composant PostDetails */}
+        {/* TODO: Exercice 4 - Ajouter le composant PostDetails */}
+        <PostDetails
+          post={selectedPost}
+          onClose={() => setSelectedPost(null)}
+          onTagClick={handleTagSelect}
+        />
 
         {/* TODO: Exercice 1 - Passer les props nécessaires à PostList */}
         <PostList
           posts={posts}
           loading={loading}
           error={error}
+          hasMore={posts.length < total}
+          onLoadMore={loadMorePosts}
           onTagClick={handleTagSelect}
+          onPostClick={handlePostClick}
           infiniteScroll={infiniteScroll}
         />
       </main>
